@@ -1,20 +1,10 @@
+#include "pets.h"
 #include <iostream>
-#include <string>
 
-class Pet {
-    virtual void bath(std::string name) = 0;
-};
+void Dog::bath(const std::string & name) const {
+    std::cout << "Dog: " << name << " -> Taking a bath.\n";
+}
 
-class Dog : public Pet {
-public:
-    void bath(std::string name) override {
-        std::cout << "Dog: " << name << " -> Taking a bath.\n";
-    }
-};
-
-class Cat : public Pet {
-public:
-    void bath(std::string name) override {
-        std::cout << "Cat: " << name << " -> Taking a bath.\n";
-    }
-};
+void Cat::bath(const std::string & name) const {
+    std::cout << "Dog: " << name << " -> Taking a bath.\n";
+}

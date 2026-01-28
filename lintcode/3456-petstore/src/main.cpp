@@ -1,11 +1,14 @@
 #include <iostream>
-#include "receptionist.cpp"
+#include "receptionist.h"
 
 int main() {
-    std::string cat_name = "Tom", dog_name = "Teddy";
-    Receptionist r;
-    r.do_cat_bath(cat_name);
-    r.do_dog_bath(dog_name);
+    std::cout << "HELLO WORLD!\n";
+    Dog dog;
+    Cat cat;
+
+    Receptionist rec;
+    rec.do_bath(dog, "Buddy");
+    rec.do_bath(cat, "Kitty");
+
     return 0;
 }
-
