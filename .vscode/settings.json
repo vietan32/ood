@@ -1,0 +1,28 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.debug.settings.onBuildFailureProceed": false,
+    // Disable all auto-suggestions and autocomplete
+    "editor.suggest.enabled": false,
+    "editor.quickSuggestions": {
+        "other": "off",
+        "comments": "off",
+        "strings": "off"
+    },
+    "editor.suggestOnTriggerCharacters": false,
+    "editor.wordBasedSuggestions": "off",
+    "editor.parameterHints.enabled": false,
+    "editor.inlineSuggest.enabled": false,
+    "editor.suggest.showWords": false,
+    "editor.tabCompletion": "off",
+    "editor.acceptSuggestionOnEnter": "off",
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    "editor.snippetSuggestions": "none",
+    "editor.hover.enabled": "off",
+    // Disable Copilot (if installed)
+    "github.copilot.enable": {
+        "*": false
+    },
+    "github.copilot.editor.enableAutoCompletions": false,
+    // Disable Antigravity / other AI inline suggestions
+    "editor.inlineSuggest.suppressSuggestions": true
+}
