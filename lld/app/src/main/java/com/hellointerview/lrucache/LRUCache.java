@@ -7,25 +7,26 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class LRUCache {
+public class LRUCache<K, V> {
     private class Node {
-        String key;
-        String value;
+        K key;
+        V value;
         Node prev;
         Node next;
 
-        Node(String key, String value) {
+        Node(K key, V value) {
             this.key = key;
             this.value = value;
         }
     }
 
-    private final Map<String, Node> map;
+    private final Map<K, Node> map;
     private final int capacity;
     private int size;
     private final Node tail, head;
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
+    @SuppressWarnings("null")
     public LRUCache(int capacity) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("Capacity must be greater than 0");
@@ -39,7 +40,7 @@ public class LRUCache {
         tail.prev = head;
     }
 
-    public String get(String key) {
+    public V get(K key) {
         if (key == null) {
             throw new IllegalArgumentException("Key cannot be null");
         }
@@ -56,7 +57,7 @@ public class LRUCache {
         }
     }
 
-    public void put(String key, String value) {
+    public void put(K key, V value) {
         if (key == null || value == null) {
             throw new IllegalArgumentException("Key and value cannot be null");
         }
@@ -106,7 +107,7 @@ public class LRUCache {
         System.out.println("Running LRUCache verification tests...");
 
         // Test 1: Basic Put and Get
-        LRUCache cache = new LRUCache(2);
+        LRUCache<String, String> cache = new LRUCache<>(2);
         cache.put("k1", "v1");
         cache.put("k2", "v2");
         assert "v1".equals(cache.get("k1")) : "Expected v1 for k1";
@@ -141,7 +142,7 @@ public class LRUCache {
 
         // Test 5: Edge Case - Invalid Capacity
         try {
-            new LRUCache(0);
+            new LRUCache<String, String>(0);
             assert false : "Expected IllegalArgumentException for capacity <= 0";
         } catch (IllegalArgumentException e) {
             System.out.println("Test 5 Passed: Invalid capacity validation");
@@ -170,7 +171,7 @@ public class LRUCache {
         }
 
         // Test 7: Edge Case - Capacity of 1
-        LRUCache cacheCap1 = new LRUCache(1);
+        LRUCache<String, String> cacheCap1 = new LRUCache<>(1);
         cacheCap1.put("a", "1");
         assert "1".equals(cacheCap1.get("a"));
         cacheCap1.put("b", "2");
@@ -179,7 +180,7 @@ public class LRUCache {
         System.out.println("Test 7 Passed: Single element capacity");
 
         // Test 8: Multithreaded Concurrency Stress Test
-        final LRUCache concurrentCache = new LRUCache(100);
+        final LRUCache<String, String> concurrentCache = new LRUCache<>(100);
         final int numThreads = 10;
         final int opsPerThread = 1000;
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
@@ -205,6 +206,14 @@ public class LRUCache {
         executor.shutdown();
         assert concurrentCache.size <= 100 : "Cache size exceeds capacity under concurrency";
         System.out.println("Test 8 Passed: Multithreaded Concurrency Stress Test");
+
+        // Test 9: Generics Type Test (Integer keys, custom Object values)
+        LRUCache<Integer, Double> intDoubleCache = new LRUCache<>(2);
+        intDoubleCache.put(1, 3.14);
+        intDoubleCache.put(2, 2.718);
+        assert Double.valueOf(3.14).equals(intDoubleCache.get(1));
+        assert Double.valueOf(2.718).equals(intDoubleCache.get(2));
+        System.out.println("Test 9 Passed: Generic type support (<Integer, Double>)");
 
         System.out.println("All tests passed successfully!");
     }
