@@ -9,10 +9,14 @@ Solution 2: Fixed-Size Bucket (Circular Array)
 
 package com.leetcode;
 
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 public class DesignHitCounter {
 
     private final int[] times;
     private final int[] hits;
+
+    private final ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
 
     public DesignHitCounter() {
         this.times = new int[300];
@@ -21,27 +25,37 @@ public class DesignHitCounter {
 
     /** Record a hit. */
     public void hit(int timestamp) {
-        int idx = timestamp % 300;
-        if (times[idx] != timestamp) {
-            // New timestamp mapping to this bucket: reset bucket
-            times[idx] = timestamp;
-            hits[idx] = 1;
-        } else {
-            // Same timestamp already in bucket: aggregate hits
-            hits[idx]++;
+        rwLock.writeLock().lock();
+        try {
+            int idx = timestamp % 300;
+            if (times[idx] != timestamp) {
+                // New timestamp mapping to this bucket: reset bucket
+                times[idx] = timestamp;
+                hits[idx] = 1;
+            } else {
+                // Same timestamp already in bucket: aggregate hits
+                hits[idx]++;
+            }
+        } finally {
+            rwLock.writeLock().unlock();
         }
     }
 
     /** Return the number of hits in the past 5 minutes (300 seconds). */
     public int getHits(int timestamp) {
-        int totalHits = 0;
-        for (int i = 0; i < 300; i++) {
-            // Include bucket count only if timestamp is within the last 300 seconds
-            if (timestamp - times[i] < 300) {
-                totalHits += hits[i];
+        rwLock.readLock().lock();
+        try {
+            int totalHits = 0;
+            for (int i = 0; i < 300; i++) {
+                // Include bucket count only if timestamp is within the last 300 seconds
+                if (timestamp - times[i] < 300) {
+                    totalHits += hits[i];
+                }
             }
+            return totalHits;
+        } finally {
+            rwLock.readLock().unlock();
         }
-        return totalHits;
     }
 }
 
