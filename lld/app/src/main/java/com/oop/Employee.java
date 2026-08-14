@@ -21,8 +21,13 @@ public class Employee extends Person {
         return String.format("%s, %d, %s", getName(), getAge(), position);
     }
 
+    @Override
+    public String info() {
+        return String.format("%s, %d, is a %s", getName(), getAge(), position);
+    }
+
     public static void main(String[] args) {
         Employee employee = new Employee("Alice", 22, "Receptionist");
-        System.out.println(employee);
+        System.out.println(employee.info());
     }
 }
