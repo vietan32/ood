@@ -16,12 +16,13 @@ public class Employee extends Person {
         this.position = position;
     }
 
-    public void info() {
-        System.out.println(String.format("%s, %d, %s", getName(), getAge(), position));
+    @Override
+    public String toString() {
+        return String.format("%s, %d, %s", getName(), getAge(), position);
     }
 
     public static void main(String[] args) {
         Employee employee = new Employee("Alice", 22, "Receptionist");
-        employee.info();
+        System.out.println(employee);
     }
 }
